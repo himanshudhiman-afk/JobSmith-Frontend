@@ -1,0 +1,169 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --accent: 255 161 22;
+  --brand-blue: 150 209 249;
+  --brand-charcoal: 46 46 46;
+}
+
+html {
+  font-family: "EB Garamond", Georgia, serif;
+}
+
+@keyframes hero-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes score-ring-reveal {
+  from {
+    stroke-dashoffset: var(--score-circumference);
+  }
+  to {
+    stroke-dashoffset: var(--score-offset);
+  }
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-glow {
+  50% {
+    opacity: 0.65;
+    transform: scale(1.08);
+  }
+}
+
+.page-enter {
+  animation: page-enter 260ms ease-out both;
+}
+
+.hero-intro {
+  animation: hero-arrive 550ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.hero-glow {
+  animation: hero-glow 8s ease-in-out infinite;
+}
+
+.hero-marquee-track {
+  animation: hero-marquee 38s linear infinite;
+}
+
+.hero-marquee-card {
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.hero-marquee-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgb(15 23 42 / 0.08);
+}
+
+.hero-marquee:hover .hero-marquee-track {
+  animation-play-state: paused;
+}
+
+.score-ring-progress {
+  animation: score-ring-reveal 1.2s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-enter,
+  .hero-intro,
+  .hero-glow,
+  .hero-marquee-track,
+  .score-ring-progress,
+  .hero-marquee-card {
+    animation: none;
+    transition: none;
+  }
+
+  .hero-marquee-card:hover {
+    transform: none;
+  }
+}
+
+body {
+  @apply bg-slate-50 text-brand-charcoal antialiased;
+}
+
+.dark body {
+  @apply bg-slate-950 text-slate-100;
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold
+      transition-[color,background-color,border-color,box-shadow,transform] duration-200 ease-out
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 focus-visible:ring-offset-2
+      disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .btn-primary {
+    @apply btn bg-accent-500 text-brand-charcoal shadow-sm hover:bg-accent-400;
+  }
+  .btn-secondary {
+    @apply btn bg-white text-slate-700 ring-1 ring-inset ring-slate-300 hover:bg-slate-50
+      dark:bg-slate-900 dark:text-slate-200 dark:ring-slate-700 dark:hover:bg-slate-800;
+  }
+  .btn-danger {
+    @apply btn bg-red-600 text-white hover:bg-red-700;
+  }
+  .card {
+    @apply rounded-xl border border-slate-200/80 bg-white p-5 shadow-card
+      transition-[transform,box-shadow,border-color] duration-200 ease-out
+      dark:border-slate-800 dark:bg-slate-900;
+  }
+  .input {
+    @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900
+      placeholder:text-slate-400 focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-100
+      dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:ring-accent-900;
+  }
+  .label {
+    @apply mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300;
+  }
+  .field-error {
+    @apply mt-1 text-xs font-medium text-red-600;
+  }
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .btn:not(:disabled):hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgb(15 23 42 / 0.12);
+  }
+
+  .btn:not(:disabled):active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: rgb(255 161 22 / 0.28);
+    box-shadow: 0 8px 20px rgb(15 23 42 / 0.08);
+  }
+}
