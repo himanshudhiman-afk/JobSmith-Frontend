@@ -7,6 +7,7 @@ import {
   ArrowRight,
   CheckCircle2
 } from "lucide-react";
+import { BrandLogo } from "../components/BrandLogo";
 
 const FEATURES = [
   {
@@ -61,12 +62,7 @@ export function LandingPage() {
   return (
     <div className="bg-white dark:bg-slate-950">
       <header className="mx-auto flex max-w-6xl items-center justify-between border-b border-slate-100 px-4 py-5 sm:px-6 lg:px-8 dark:border-slate-900">
-        <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-charcoal text-sm font-bold text-accent-500">
-            JP
-          </div>
-          <span className="text-base font-bold text-slate-900 dark:text-slate-100">Job Prep</span>
-        </div>
+        <BrandLogo compactOnMobile />
         <div className="flex items-center gap-3">
           <Link to="/login" className="btn-secondary">
             Log in
@@ -101,7 +97,7 @@ export function LandingPage() {
         </div>
       </section>
 
-      <section className="hero-marquee relative mt-8 overflow-hidden border-y border-slate-100 bg-slate-50/80 py-4 dark:border-slate-800 dark:bg-slate-900/40" aria-label="Job Prep features">
+      <section className="hero-marquee relative mt-8 overflow-hidden border-y border-slate-100 bg-slate-50/80 py-4 dark:border-slate-800 dark:bg-slate-900/40" aria-label="JobSmith features">
         <p className="sr-only">Resume insights, skill focus, interview practice, and career tools.</p>
         <div className="hero-marquee-track flex w-max" aria-hidden="true">
           {[0, 1].map((group) => (
@@ -168,7 +164,8 @@ export function LandingPage() {
       </section>
 
       <footer className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 py-6 text-sm text-slate-400 sm:flex-row sm:px-6 lg:px-8">
-        <span>© {new Date().getFullYear()} Job Prep</span>
+        <BrandLogo className="hidden h-8 sm:inline-flex" />
+        <span>© {new Date().getFullYear()} JobSmith</span>
         <div className="flex gap-4">
           <Link to="/privacy" className="hover:text-slate-600">
             Privacy Policy

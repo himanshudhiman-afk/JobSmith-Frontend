@@ -11,6 +11,7 @@ import {
   Settings,
   X
 } from "lucide-react";
+import { BrandLogo } from "./BrandLogo";
 
 const NAV_ITEMS = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -36,12 +37,7 @@ export function Sidebar({ open, onClose }) {
         }`}
       >
         <div className="mb-6 flex items-center justify-between px-2">
-          <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-charcoal text-sm font-bold text-accent-500">
-              JP
-            </div>
-            <span className="text-base font-bold text-slate-900 dark:text-slate-100">Job Prep</span>
-          </div>
+          <BrandLogo className="h-9" />
           <button onClick={onClose} className="rounded-md p-1 text-slate-400 hover:bg-slate-100 lg:hidden">
             <X size={18} />
           </button>

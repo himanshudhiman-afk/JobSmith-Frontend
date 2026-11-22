@@ -24,7 +24,7 @@ export function RegisterPage() {
     setServerError("");
     try {
       await registerUser({ name, email, password });
-      showToast("Account created. Welcome to Job Prep!", "success");
+      showToast("Account created. Welcome to JobSmith!", "success");
       navigate("/dashboard", { replace: true });
     } catch (err) {
       setServerError(getApiErrorMessage(err));

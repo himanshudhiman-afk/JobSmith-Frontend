@@ -9,7 +9,7 @@ export function TermsPage() {
       <h1 className="mt-4 text-3xl font-bold text-slate-900 dark:text-slate-100">Terms of Use</h1>
       <div className="prose mt-6 space-y-4 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
         <p>
-          Job Prep is an academic project provided for demonstration and educational purposes, &quot;as
+          JobSmith is an academic project provided for demonstration and educational purposes, &quot;as
           is&quot;, without warranty of any kind.
         </p>
         <p>
