@@ -1,5 +1,10 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { getChatCompletion, PuterAIError } from "../services/puterClient";
+import {
+  getChatCompletion,
+  PuterAIError,
+  PuterSignInCancelledError,
+  switchPuterAccount
+} from "../services/puterClient";
 
 describe("getChatCompletion", () => {
   afterEach(() => {
@@ -56,5 +61,55 @@ describe("getChatCompletion", () => {
     await expect(getChatCompletion("prompt")).rejects.toThrow(
       new PuterAIError("The AI returned no text after retrying (finish reason: tool_calls). Please try again in a moment.")
     );
+  });
+});
+
+describe("switchPuterAccount", () => {
+  afterEach(() => {
+    delete window.puter;
+    vi.restoreAllMocks();
+  });
+
+  it("signs out the current account before signing in again", async () => {
+    const calls = [];
+    window.puter = {
+      auth: {
+        isSignedIn: vi.fn(() => {
+          calls.push("isSignedIn");
+          return true;
+        }),
+        signOut: vi.fn(async () => calls.push("signOut")),
+        signIn: vi.fn(async () => calls.push("signIn"))
+      }
+    };
+
+    await switchPuterAccount();
+
+    expect(calls).toEqual(["isSignedIn", "signOut", "signIn"]);
+  });
+
+  it("signs in without signing out when no Puter account is active", async () => {
+    const signOut = vi.fn();
+    const signIn = vi.fn().mockResolvedValue(undefined);
+    window.puter = {
+      auth: { isSignedIn: () => false, signOut, signIn }
+    };
+
+    await switchPuterAccount();
+
+    expect(signOut).not.toHaveBeenCalled();
+    expect(signIn).toHaveBeenCalledOnce();
+  });
+
+  it("reports when the user cancels Puter sign-in", async () => {
+    window.puter = {
+      auth: {
+        isSignedIn: () => false,
+        signOut: vi.fn(),
+        signIn: vi.fn().mockRejectedValue({ error: { code: "auth_canceled" } })
+      }
+    };
+
+    await expect(switchPuterAccount()).rejects.toBeInstanceOf(PuterSignInCancelledError);
   });
 });

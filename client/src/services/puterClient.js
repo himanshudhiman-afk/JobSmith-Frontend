@@ -2,12 +2,8 @@
 // getChatCompletion() so the model name and auth/error handling live in one place.
 // Docs: https://docs.puter.com/AI/chat/ , https://docs.puter.com/Auth/
 //
-// Auth flow: we deliberately do NOT pre-check or call puter.auth.signIn() ourselves.
-// Puter.js's own driver call (used internally by puter.ai.chat) already does this: the
-// first time an unauthenticated app calls any AI method, the SDK shows its own sign-in
-// dialog automatically, resolves once the user completes it (or rejects if they cancel),
-// and every call after that just works. Calling puter.ai.chat(prompt, { model }) directly,
-// the same way, is all that's needed here.
+// Normal AI calls rely on Puter.js to prompt for sign-in as needed. Account switching is
+// explicit and only runs when the user requests it from Settings.
 
 export const AI_MODEL = "claude-sonnet-5"; // change here to switch models app-wide
 
@@ -29,6 +25,21 @@ export class PuterAIError extends Error {
   constructor(message) {
     super(message || "The AI service could not complete this request.");
     this.name = "PuterAIError";
+  }
+}
+
+export async function switchPuterAccount() {
+  const { auth } = getPuter();
+  if (!auth?.isSignedIn || !auth?.signOut || !auth?.signIn) {
+    throw new PuterAIError("Puter account switching is unavailable right now.");
+  }
+
+  try {
+    if (auth.isSignedIn()) await auth.signOut();
+    await auth.signIn();
+  } catch (err) {
+    if (isSignInCancellation(err)) throw new PuterSignInCancelledError();
+    throw new PuterAIError(err?.message || "Could not switch Puter accounts.");
   }
 }
 
